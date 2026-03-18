@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCare - Kesehatan Mental Anda, Prioritas Kami</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            blue: '#A7C7E7',
+                            pink: '#FFD1DC',
+                            green: '#B5EAD7',
+                            yellow: '#FFDAC1',
+                            purple: '#CBAACB',
+                            teal: '#6B9080', 
+                            lightTeal: '#A4C3B2',
+                            bg: '#FDFBF7',
+                            text: '#27374D',
+                            card: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'breathe': 'breathe 8s infinite ease-in-out',
+                        'slide-in': 'slideIn 0.4s ease-out forwards',
+                        'slide-out': 'slideOut 0.4s ease-in forwards',
+                        'fade-in': 'fadeIn 0.5s forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+                            '50%': { transform: 'scale(1.5)', opacity: '0.4' },
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(30%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideOut: {
+                            '0%': { transform: 'translateX(0)', opacity: '1' },
+                            '100%': { transform: 'translateX(-30%)', opacity: '0' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #27374D;
+            overflow-x: hidden;
+        }
+        
+        html { scroll-behavior: smooth; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #6B9080; border-radius: 10px; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(107, 144, 128, 0.15);
+        }
+
+        .question-card { width: 100%; }
+        .slide-enter { animation: slideIn 0.4s ease-out forwards; position: relative; z-index: 10; }
+        .slide-exit { animation: slideOut 0.4s ease-in forwards; position: absolute; top: 0; left: 0; width: 100%; z-index: 0; pointer-events: none; }
+
+        .bg-decoration { position: fixed; z-index: -1; filter: blur(60px); opacity: 0.5; }
+        .dec-1 { top: -10%; left: -10%; width: 300px; height: 300px; background: #FFD1DC; border-radius: 50%; animation: blob 8s infinite alternate; }
+        .dec-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #A4C3B2; border-radius: 50%; animation: blob 10s infinite alternate-reverse; }
+        .dec-3 { top: 40%; left: 40%; width: 250px; height: 250px; background: #B5EAD7; border-radius: 50%; animation: blob 12s infinite; }
+        
+        @media (min-width: 768px) {
+            .dec-1 { width: 400px; height: 400px; }
+            .dec-2 { width: 500px; height: 500px; }
+            .dec-3 { width: 300px; height: 300px; }
+        }
+
+        .dropdown:hover .dropdown-menu { display: block; }
+        
+        /* Mobile menu transitions */
+        #mobile-menu.open { transform: translateX(0); }
+        #mobile-overlay.open { opacity: 1; pointer-events: auto; }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col relative">
+
+    <div class="bg-decoration dec-1"></div>
+    <div class="bg-decoration dec-2"></div>
+    <div class="bg-decoration dec-3"></div>
+
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 glass-card transition-all duration-300 border-b border-gray-200">
+        <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" onclick="navigate('home')" class="text-xl md:text-2xl font-bold text-pastel-teal flex items-center gap-2">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-pastel-teal">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                MindCare
+            </a>
+            
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm lg:text-base">
+                <a href="#" onclick="navigate('home')" class="hover:text-pastel-teal font-medium transition">Home</a>
+                <a href="#" onclick="navigate('konsultasi')" class="hover:text-pastel-teal font-medium transition">Konsultasi</a>
+                
+                <!-- Dropdown Layanan -->
+                <div class="relative dropdown group py-2">
+                    <button class="hover:text-pastel-teal font-medium transition flex items-center gap-1">
+                        Layanan <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="dropdown-menu absolute hidden pt-2 top-full -left-4 w-56 z-50">
+                        <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden py-2">
+                            <a href="#" onclick="navigate('artikel')" class="block px-4 py-2 text-sm hover:bg-gray-50 hover:text-pastel-teal">Artikel</a>
+                            <a href="#" onclick="navigate('modul')" class="block px-4 py-2 text-sm hover:bg-gray-50 hover:text-pastel-teal">Modul Pembelajaran</a>
+                            <a href="#" onclick="navigate('seminar')" class="block px-4 py-2 text-sm hover:bg-gray-50 hover:text-pastel-teal">Seminar & Workshop</a>
+                            <a href="#" onclick="navigate('komunitas')" class="block px-4 py-2 text-sm hover:bg-gray-50 hover:text-pastel-teal">Komunitas</a>
+                            <a href="#" onclick="navigate('meditasi')" class="block px-4 py-2 text-sm hover:bg-gray-50 hover:text-pastel-teal">Meditasi</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" onclick="navigate('chat')" class="hover:text-pastel-teal font-medium transition">Teman Bicara</a>
+                <a href="#" onclick="navigate('about')" class="hover:text-pastel-teal font-medium transition">About Us</a>
+            </nav>
+
+            <button onclick="navigate('test')" class="hidden md:block bg-pastel-teal hover:bg-teal-700 text-white px-5 lg:px-6 py-2 rounded-full font-bold shadow-md transition transform hover:scale-105 text-sm lg:text-base">
+                Mulai Tes
+            </button>
+            
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-gray-700 focus:outline-none p-2 -mr-2">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE SIDEBAR MENU -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleMobileMenu()"></div>
+    <div id="mobile-menu" class="fixed top-0 left-0 w-[85%] max-w-sm h-full bg-white z-50 transform -translate-x-full transition-transform duration-300 shadow-2xl overflow-y-auto">
+        <div class="p-5 flex justify-between items-center border-b">
+            <a href="#" class="text-xl font-bold text-pastel-teal flex items-center gap-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-pastel-teal">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                MindCare
+            </a>
+            <button onclick="toggleMobileMenu()" class="text-gray-500 hover:text-red-500 text-2xl p-2 -mr-2"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <nav class="flex flex-col p-4 space-y-2">
+            <a href="#" onclick="navigateMobile('home')" class="px-4 py-3 bg-gray-100 rounded-lg text-pastel-teal font-semibold">Home</a>
+            <a href="#" onclick="navigateMobile('konsultasi')" class="px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Konsultasi</a>
+            
+            <!-- Mobile Accordion Layanan -->
+            <div class="w-full">
+                <button onclick="toggleMobileSubmenu()" class="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 rounded-lg flex justify-between items-center bg-gray-50">
+                    Layanan <i id="mobile-submenu-icon" class="fa-solid fa-chevron-up text-xs transition-transform duration-300"></i>
+                </button>
+                <div id="mobile-submenu" class="flex flex-col pl-8 pr-4 py-2 space-y-3">
+                    <a href="#" onclick="navigateMobile('artikel')" class="text-sm text-gray-600 hover:text-pastel-teal py-1">Artikel</a>
+                    <a href="#" onclick="navigateMobile('modul')" class="text-sm text-gray-600 hover:text-pastel-teal py-1">Modul Pembelajaran</a>
+                    <a href="#" onclick="navigateMobile('seminar')" class="text-sm text-gray-600 hover:text-pastel-teal py-1">Seminar & Workshop</a>
+                    <a href="#" onclick="navigateMobile('komunitas')" class="text-sm text-gray-600 hover:text-pastel-teal py-1">Komunitas</a>
+                    <a href="#" onclick="navigateMobile('meditasi')" class="text-sm text-gray-600 hover:text-pastel-teal py-1">Meditasi</a>
+                </div>
+            </div>
+
+            <a href="#" onclick="navigateMobile('chat')" class="px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Teman Bicara</a>
+            <a href="#" onclick="navigateMobile('about')" class="px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">About Us</a>
+            
+            <div class="pt-6 pb-2">
+                <button onclick="navigateMobile('test')" class="w-full bg-pastel-teal text-white py-3 rounded-xl font-bold shadow-md hover:bg-teal-700 transition">
+                    Mulai Tes Sekarang
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow container mx-auto px-4 md:px-6 py-6 md:py-8 relative z-10 w-full">
+
+        <!-- 1. HOME SECTION -->
+        <section id="page-home" class="page-section animate-fade-in w-full">
+            
+            <!-- A. Hero Section -->
+            <div class="flex flex-col md:flex-row items-center justify-between min-h-[70vh] mb-16 md:mb-24">
+                <div class="md:w-1/2 space-y-5 md:space-y-6 text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                        Kesehatan Mental Anda, <br class="hidden sm:block">
+                        <span class="text-pastel-teal">Prioritas Kami</span>
+                    </h1>
+                    <p class="text-base md:text-lg text-gray-600 leading-relaxed max-w-lg mx-auto md:mx-0">
+                        Kesehatan mental sama pentingnya dengan kesehatan fisik. Di MindCare, kami percaya bahwa setiap orang berhak mendapatkan ruang yang aman untuk bercerita, belajar, dan pulih.
+                    </p>
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 pt-2 md:pt-4 justify-center md:justify-start">
+                        <button onclick="navigate('test')" class="bg-pastel-teal hover:bg-teal-700 text-white px-6 md:px-8 py-3 rounded-full font-bold shadow-lg transition transform hover:-translate-y-1 w-full sm:w-auto">
+                            Mulai Tes Sekarang <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button onclick="navigate('chat')" class="bg-white hover:bg-gray-50 border-2 border-pastel-teal text-pastel-teal px-6 md:px-8 py-3 rounded-full font-bold shadow-sm transition transform hover:-translate-y-1 w-full sm:w-auto">
+                            Cari Teman Bicara
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center relative w-full">
+                    <!-- Abstract Illustration -->
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-pastel-lightTeal rounded-full shadow-xl flex items-center justify-center animate-blob overflow-hidden border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=80" alt="Mental Health" class="w-full h-full object-cover mix-blend-overlay opacity-80">
+                    </div>
+                    <div class="absolute top-5 md:top-10 right-0 md:right-10 bg-white p-2 md:p-3 rounded-2xl shadow-lg animate-bounce" style="animation-duration: 3s;">
+                        <i class="fa-solid fa-leaf text-pastel-green text-xl md:text-2xl"></i>
+                    </div>
+                    <div class="absolute bottom-5 md:bottom-10 left-0 md:left-10 bg-white p-2 md:p-3 rounded-2xl shadow-lg animate-bounce" style="animation-duration: 4s;">
+                        <i class="fa-solid fa-spa text-pastel-teal text-xl md:text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B. Banner Kepercayaan / Statistik Singkat -->
+            <div class="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-sm border border-gray-100 mb-16 md:mb-24 flex flex-col md:flex-row justify-around items-center gap-8 text-center">
+                <div class="space-y-2">
+                    <div class="w-12 h-12 bg-teal-50 text-pastel-teal rounded-full flex items-center justify-center mx-auto text-xl mb-3"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3 class="font-bold text-xl md:text-2xl text-gray-800">100% Anonim</h3>
+                    <p class="text-sm text-gray-500">Privasi dan datamu terjamin aman</p>
+                </div>
+                <div class="hidden md:block w-px h-16 bg-gray-200"></div>
+                <div class="space-y-2">
+                    <div class="w-12 h-12 bg-blue-50 text-pastel-blue rounded-full flex items-center justify-center mx-auto text-xl mb-3"><i class="fa-solid fa-users"></i></div>
+                    <h3 class="font-bold text-xl md:text-2xl text-gray-800">+15.000</h3>
+                    <p class="text-sm text-gray-500">Pengguna saling mendukung</p>
+                </div>
+                <div class="hidden md:block w-px h-16 bg-gray-200"></div>
+                <div class="space-y-2">
+                    <div class="w-12 h-12 bg-pink-50 text-pastel-pink rounded-full flex items-center justify-center mx-auto text-xl mb-3"><i class="fa-solid fa-user-doctor"></i></div>
+                    <h3 class="font-bold text-xl md:text-2xl text-gray-800">50+ Ahli</h3>
+                    <p class="text-sm text-gray-500">Psikolog bersertifikat siap bantu</p>
+                </div>
+            </div>
+
+            <!-- C. Fitur & Layanan Unggulan -->
+            <div class="mb-16 md:mb-24">
+                <div class="text-center mb-10 md:mb-12">
+                    <h2 class="text-2xl md:text-4xl font-bold mb-4">Apa yang bisa kamu lakukan di sini?</h2>
+                    <div class="w-20 md:w-24 h-1 bg-pastel-teal mx-auto rounded-full mb-4 md:mb-6"></div>
+                    <p class="text-gray-500 max-w-2xl mx-auto px-4 text-sm md:text-base">MindCare menyediakan berbagai fitur yang dirancang khusus untuk membantumu mengenali, merawat, dan memulihkan kesehatan mentalmu.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <div onclick="navigate('test')" class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition transform hover:-translate-y-2 cursor-pointer group">
+                        <div class="w-14 h-14 bg-pastel-yellow rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-clipboard-question"></i></div>
+                        <h3 class="text-xl font-bold mb-3">Tes Psikologi Ringan</h3>
+                        <p class="text-gray-500 text-sm mb-4">Kenali emosi dan apa yang sedang kamu rasakan hari ini melalui kuesioner bercerita yang interaktif dan menyenangkan.</p>
+                        <span class="text-pastel-teal font-bold text-sm group-hover:underline">Coba Tes Sekarang <i class="fa-solid fa-arrow-right text-xs ml-1"></i></span>
+                    </div>
+
+                    <div onclick="navigate('chat')" class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition transform hover:-translate-y-2 cursor-pointer group">
+                        <div class="w-14 h-14 bg-pastel-blue rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-user-secret"></i></div>
+                        <h3 class="text-xl font-bold mb-3">Teman Bicara Anonim</h3>
+                        <p class="text-gray-500 text-sm mb-4">Butuh tempat curhat tapi takut dihakimi? Terhubunglah dengan sesama pengguna secara anonim untuk saling berbagi beban.</p>
+                        <span class="text-pastel-blue font-bold text-sm group-hover:underline">Mulai Ngobrol <i class="fa-solid fa-arrow-right text-xs ml-1"></i></span>
+                    </div>
+
+                    <div onclick="navigate('konsultasi')" class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition transform hover:-translate-y-2 cursor-pointer group">
+                        <div class="w-14 h-14 bg-pastel-pink rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-stethoscope"></i></div>
+                        <h3 class="text-xl font-bold mb-3">Konsultasi Psikolog</h3>
+                        <p class="text-gray-500 text-sm mb-4">Dapatkan penanganan profesional dari psikolog klinis yang siap mendengarkan dan memberikan terapi sesuai kebutuhanmu.</p>
+                        <span class="text-pastel-pink font-bold text-sm group-hover:underline">Lihat Jadwal <i class="fa-solid fa-arrow-right text-xs ml-1"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- D. Cara Kerja / Alur (How it Works) -->
+            <div class="bg-pastel-lightTeal/10 rounded-3xl p-8 md:p-12 mb-16 md:mb-24">
+                <div class="text-center mb-10 md:mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Langkah Menuju Pikiran yang Lebih Tenang</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center relative">
+                    <!-- Garis penghubung (hanya terlihat di desktop) -->
+                    <div class="hidden md:block absolute top-10 left-[15%] right-[15%] h-0.5 bg-pastel-teal/20 z-0"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto bg-white border-4 border-pastel-teal text-pastel-teal rounded-full flex items-center justify-center text-2xl font-bold shadow-sm mb-4">1</div>
+                        <h3 class="text-lg font-bold mb-2">Ikuti Tes</h3>
+                        <p class="text-sm text-gray-500">Jawab beberapa pertanyaan singkat tentang perasaanmu hari ini.</p>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto bg-white border-4 border-pastel-teal text-pastel-teal rounded-full flex items-center justify-center text-2xl font-bold shadow-sm mb-4">2</div>
+                        <h3 class="text-lg font-bold mb-2">Terima Personalisasi</h3>
+                        <p class="text-sm text-gray-500">Dapatkan rekomendasi artikel, modul, dan aktivitas yang sesuai dengan kondisimu.</p>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto bg-white border-4 border-pastel-teal text-pastel-teal rounded-full flex items-center justify-center text-2xl font-bold shadow-sm mb-4">3</div>
+                        <h3 class="text-lg font-bold mb-2">Mulai Perjalananmu</h3>
+                        <p class="text-sm text-gray-500">Terapkan rekomendasi, dengarkan meditasi, atau hubungi profesional bila perlu.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- E. Bottom CTA (Call to Action) -->
+            <div class="bg-pastel-teal rounded-3xl p-8 md:p-16 text-center text-white shadow-xl relative overflow-hidden mb-8">
+                <div class="absolute -top-24 -left-24 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-pastel-green opacity-20 rounded-full blur-2xl"></div>
+                
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 md:mb-6 relative z-10">Sudah siap untuk merasa lebih baik?</h2>
+                <p class="text-teal-50 text-base md:text-lg mb-8 max-w-2xl mx-auto relative z-10">Jangan tunda lagi. Berikan dirimu waktu 5 menit untuk mengenali apa yang sedang pikiran dan hatimu rasakan.</p>
+                
+                <button onclick="navigate('test')" class="relative z-10 bg-white text-pastel-teal px-8 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:bg-gray-50 transition transform hover:scale-105">
+                    Mulai Tes Sekarang Gratis
+                </button>
+            </div>
+
+        </section>
+
+        <!-- HALAMAN ARTIKEL -->
+        <section id="page-artikel" class="page-section hidden animate-fade-in max-w-5xl mx-auto py-8 md:py-10">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Artikel Kesehatan Mental</h2>
+                <div class="w-20 md:w-24 h-1 bg-pastel-blue mx-auto rounded-full mb-4 md:mb-6"></div>
+                <p class="text-sm md:text-base text-gray-500">Baca wawasan terbaru untuk menjaga kesehatan mentalmu sehari-hari.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Artikel 1 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-md group cursor-pointer hover:-translate-y-2 transition flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80" class="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="p-5 md:p-6 flex flex-col flex-grow">
+                        <span class="text-[10px] md:text-xs font-bold text-pastel-blue uppercase tracking-wider">Mindfulness</span>
+                        <h3 class="font-bold text-base md:text-lg mt-2 mb-2 md:mb-3 leading-tight">Manfaat Yoga untuk Meredakan Kecemasan</h3>
+                        <p class="text-gray-500 text-xs md:text-sm line-clamp-2 mt-auto">Latihan fisik yang dipadukan dengan pernapasan dapat menurunkan kadar kortisol secara signifikan.</p>
+                    </div>
+                </div>
+                <!-- Artikel 2 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-md group cursor-pointer hover:-translate-y-2 transition flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" class="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="p-5 md:p-6 flex flex-col flex-grow">
+                        <span class="text-[10px] md:text-xs font-bold text-pastel-pink uppercase tracking-wider">Hubungan</span>
+                        <h3 class="font-bold text-base md:text-lg mt-2 mb-2 md:mb-3 leading-tight">Mengenal Toxic Relationship & Cara Keluar</h3>
+                        <p class="text-gray-500 text-xs md:text-sm line-clamp-2 mt-auto">Jangan biarkan dirimu terjebak dalam hubungan yang menguras energi emosionalmu.</p>
+                    </div>
+                </div>
+                <!-- Artikel 3 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-md group cursor-pointer hover:-translate-y-2 transition flex flex-col sm:col-span-2 lg:col-span-1">
+                    <img src="https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?auto=format&fit=crop&w=600&q=80" class="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="p-5 md:p-6 flex flex-col flex-grow">
+                        <span class="text-[10px] md:text-xs font-bold text-pastel-teal uppercase tracking-wider">Produktivitas</span>
+                        <h3 class="font-bold text-base md:text-lg mt-2 mb-2 md:mb-3 leading-tight">Membedakan Lelah Fisik dan Burnout</h3>
+                        <p class="text-gray-500 text-xs md:text-sm line-clamp-2 mt-auto">Ketahui tanda-tandanya agar kamu bisa mengambil langkah istirahat yang tepat.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN MODUL PEMBELAJARAN -->
+        <section id="page-modul" class="page-section hidden animate-fade-in max-w-4xl mx-auto py-8 md:py-10">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Modul Pembelajaran</h2>
+                <div class="w-20 md:w-24 h-1 bg-pastel-green mx-auto rounded-full mb-4 md:mb-6"></div>
+                <p class="text-sm md:text-base text-gray-500 px-4">Pelajari materi self-help interaktif yang disusun oleh ahli psikologi.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between cursor-pointer hover:shadow-md transition gap-4">
+                    <div class="flex items-center gap-4 md:gap-6 w-full sm:w-auto">
+                        <div class="w-12 h-12 md:w-16 md:h-16 bg-[#e6f7ed] text-[#22c55e] rounded-xl md:rounded-2xl flex items-center justify-center shrink-0">
+                            <!-- Custom SVG Ikon Buku -->
+                            <svg width="24" height="24" class="md:w-8 md:h-8" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6 4h5v16H6c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm12 0h-5v16h5c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base md:text-lg leading-tight">Modul 1: Dasar-dasar Manajemen Stres</h3>
+                            <p class="text-xs md:text-sm text-gray-500 mt-1">3 Video • 2 Kuis • Durasi 45 Menit</p>
+                        </div>
+                    </div>
+                    <button class="w-full sm:w-auto bg-pastel-teal text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-teal-700 transition shrink-0">Mulai</button>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between cursor-pointer hover:shadow-md transition gap-4">
+                    <div class="flex items-center gap-4 md:gap-6 w-full sm:w-auto">
+                        <div class="w-12 h-12 md:w-16 md:h-16 bg-[#e6f0fd] text-[#3b82f6] rounded-xl md:rounded-2xl flex items-center justify-center shrink-0">
+                            <!-- Custom SVG Ikon Otak -->
+                            <svg width="24" height="24" class="md:w-8 md:h-8" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 3c-4.4 0-8 3.6-8 8 0 1.5.4 2.9 1.1 4.1C4.4 16 4 17 4 18c0 1.1.9 2 2 2h1v1c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-1h2v1c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-1h1c1.1 0 2-.9 2-2 0-1-.4-2-1.1-2.9.7-1.2 1.1-2.6 1.1-4.1 0-4.4-3.6-8-8-8zm-1 15H9v-2h2v2zm4 0h-2v-2h2v2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base md:text-lg leading-tight">Modul 2: Mengenal Cognitive Behavioral Therapy</h3>
+                            <p class="text-xs md:text-sm text-gray-500 mt-1">5 Video • 1 Jurnal • Durasi 1 Jam 15 Menit</p>
+                        </div>
+                    </div>
+                    <button class="w-full sm:w-auto bg-pastel-teal text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-teal-700 transition shrink-0">Mulai</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN SEMINAR -->
+        <section id="page-seminar" class="page-section hidden animate-fade-in max-w-4xl mx-auto py-8 md:py-10">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Seminar & Workshop</h2>
+                <div class="w-20 md:w-24 h-1 bg-pastel-yellow mx-auto rounded-full mb-4 md:mb-6"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <!-- Event Card 1 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-lg flex flex-col sm:flex-row group">
+                    <div class="sm:w-1/3 md:w-2/5 bg-pastel-yellow p-4 md:p-6 flex items-center justify-center">
+                        <div class="text-center flex sm:block items-center gap-2 sm:gap-0">
+                            <span class="block text-2xl md:text-3xl font-bold text-gray-800">24</span>
+                            <span class="block text-sm md:text-base font-medium text-gray-600">Okt</span>
+                        </div>
+                    </div>
+                    <div class="p-5 md:p-6 sm:w-2/3 md:w-3/5 flex flex-col justify-center">
+                        <span class="text-[10px] md:text-xs font-bold text-pastel-purple uppercase tracking-wider mb-1 md:mb-2">Webinar Online</span>
+                        <h3 class="text-lg md:text-xl font-bold mb-2 group-hover:text-pastel-teal transition leading-tight">Overcoming Academic Burnout</h3>
+                        <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4"><i class="fa-regular fa-clock mr-1"></i> 19:00 - 21:00 WIB</p>
+                        <button class="text-left font-bold text-sm md:text-base text-pastel-teal hover:text-teal-700">Daftar Gratis <i class="fa-solid fa-arrow-right ml-1 text-xs md:text-sm"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN KOMUNITAS -->
+        <section id="page-komunitas" class="page-section hidden animate-fade-in max-w-5xl mx-auto py-8 md:py-10">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Komunitas Dukungan</h2>
+                <div class="w-20 md:w-24 h-1 bg-pastel-pink mx-auto rounded-full mb-4 md:mb-6"></div>
+                <p class="text-sm md:text-base text-gray-500 px-4">Temukan ruang aman dan berbagi cerita bersama mereka yang memahami kondisimu.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <!-- Komunitas 1 -->
+                <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-pastel-blue cursor-pointer hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3 md:mb-4">
+                        <div class="flex -space-x-3">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=A&background=random">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=R&background=random">
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] md:text-xs font-bold">+5K</div>
+                        </div>
+                        <span class="bg-blue-100 text-blue-600 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold">Lelah Emosional</span>
+                    </div>
+                    <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2 leading-tight">Support Group: Burnout & Depresi Ringan</h3>
+                    <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4 line-clamp-2">Grup bagi kamu yang kehilangan motivasi, merasa lelah berkepanjangan akibat pekerjaan atau akademik.</p>
+                    <button class="w-full border-2 border-pastel-blue text-pastel-blue py-2 rounded-xl font-bold text-sm hover:bg-pastel-blue hover:text-white transition">Gabung Komunitas</button>
+                </div>
+
+                <!-- Komunitas 2 -->
+                <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-pastel-green cursor-pointer hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3 md:mb-4">
+                        <div class="flex -space-x-3">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=S&background=random">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=B&background=random">
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-green-50 text-green-600 flex items-center justify-center text-[10px] md:text-xs font-bold">+8K</div>
+                        </div>
+                        <span class="bg-green-100 text-green-600 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold">Anxiety</span>
+                    </div>
+                    <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2 leading-tight">Pejuang Kecemasan & Panic Attack</h3>
+                    <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4 line-clamp-2">Lingkaran aman untuk berbagi cara grounding, coping mechanism, dan saling menenangkan saat panik.</p>
+                    <button class="w-full border-2 border-pastel-green text-green-600 py-2 rounded-xl font-bold text-sm hover:bg-pastel-green hover:text-white transition">Gabung Komunitas</button>
+                </div>
+
+                <!-- Komunitas 3 -->
+                <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-pastel-yellow cursor-pointer hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3 md:mb-4">
+                        <div class="flex -space-x-3">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=K&background=random">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=L&background=random">
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-yellow-50 text-yellow-600 flex items-center justify-center text-[10px] md:text-xs font-bold">+10K</div>
+                        </div>
+                        <span class="bg-yellow-100 text-yellow-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold">Pikiran Berlebih</span>
+                    </div>
+                    <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2 leading-tight">Ruang Detox: Stop Overthinking</h3>
+                    <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4 line-clamp-2">Saling mengingatkan untuk hidup di masa kini (mindful). Cocok untuk kamu yang sering kesulitan tidur.</p>
+                    <button class="w-full border-2 border-yellow-400 text-yellow-600 py-2 rounded-xl font-bold text-sm hover:bg-yellow-400 hover:text-white transition">Gabung Komunitas</button>
+                </div>
+
+                <!-- Komunitas 4 -->
+                <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border-t-4 border-pastel-pink cursor-pointer hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3 md:mb-4">
+                        <div class="flex -space-x-3">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=D&background=random">
+                            <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=F&background=random">
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-pink-50 text-pink-600 flex items-center justify-center text-[10px] md:text-xs font-bold">+4K</div>
+                        </div>
+                        <span class="bg-pink-100 text-pink-600 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold">Social & Relasi</span>
+                    </div>
+                    <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2 leading-tight">Teman Cerita & Masalah Hubungan</h3>
+                    <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4 line-clamp-2">Ruang bagi yang merasa kesepian di tengah keramaian, kesulitan membangun batasan, atau pulih dari toxic relationship.</p>
+                    <button class="w-full border-2 border-pastel-pink text-pink-600 py-2 rounded-xl font-bold text-sm hover:bg-pastel-pink hover:text-white transition">Gabung Komunitas</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN MEDITASI -->
+        <section id="page-meditasi" class="page-section hidden animate-fade-in max-w-3xl mx-auto text-center py-8 md:py-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-2">Tarik Napas Dalam...</h2>
+            <p class="text-sm md:text-base text-gray-500 mb-8 md:mb-12 px-4">Ikuti lingkaran di bawah ini. Tarik napas saat membesar, hembuskan saat mengecil.</p>
+            
+            <div class="relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-12 md:mb-16 flex items-center justify-center">
+                <div class="absolute w-full h-full bg-pastel-green rounded-full opacity-50 animate-breathe"></div>
+                <div class="relative w-28 h-28 md:w-40 md:h-40 bg-white rounded-full shadow-lg flex items-center justify-center z-10">
+                    <span class="text-lg md:text-xl font-bold text-pastel-green" id="breathe-text">Tarik...</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-md text-left mx-4 md:mx-0">
+                <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">Soundtrack Ketenangan</h3>
+                
+                <!-- Audio Elements (Hidden) - Menggunakan Multiple Sources & Preload Auto agar anti-error -->
+                <audio id="audio-rain" loop preload="auto">
+                    <source src="https://cdn.pixabay.com/audio/2021/08/09/audio_82181fc182.mp3" type="audio/mpeg">
+                    <source src="https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg" type="audio/ogg">
+                </audio>
+                <audio id="audio-waves" loop preload="auto">
+                    <source src="https://cdn.pixabay.com/audio/2022/01/18/audio_d07cc7cc95.mp3" type="audio/mpeg">
+                    <source src="https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg" type="audio/ogg">
+                </audio>
+                <audio id="audio-forest" loop preload="auto">
+                    <source src="https://cdn.pixabay.com/audio/2021/08/09/audio_15e57519bb.mp3" type="audio/mpeg">
+                    <source src="https://actions.google.com/sounds/v1/animals/birds_in_forest.ogg" type="audio/ogg">
+                </audio>
+                <audio id="audio-fire" loop preload="auto">
+                    <source src="https://cdn.pixabay.com/audio/2022/02/07/audio_01dc07787f.mp3" type="audio/mpeg">
+                    <source src="https://actions.google.com/sounds/v1/domestic/fireplace.ogg" type="audio/ogg">
+                </audio>
+
+                <div class="space-y-2 md:space-y-3">
+                    <!-- Track 1: Hujan -->
+                    <div class="flex items-center justify-between p-3 border rounded-xl hover:bg-gray-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-pastel-blue rounded-full flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-cloud-rain"></i></div>
+                            <div><p class="font-bold text-sm md:text-base">Hujan Rintik di Kaca</p><p class="text-[10px] md:text-xs text-gray-400">Suara Alam • Fokus & Relaksasi</p></div>
+                        </div>
+                        <button onclick="toggleAudio('audio-rain', this)" class="text-pastel-blue hover:text-blue-500 transition transform hover:scale-110"><i class="fa-solid fa-circle-play text-2xl md:text-3xl"></i></button>
+                    </div>
+                    
+                    <!-- Track 2: Ombak -->
+                    <div class="flex items-center justify-between p-3 border rounded-xl hover:bg-gray-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-teal-300 rounded-full flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-water"></i></div>
+                            <div><p class="font-bold text-sm md:text-base">Suara Ombak Pantai</p><p class="text-[10px] md:text-xs text-gray-400">Suara Alam • Ketenangan Pikiran</p></div>
+                        </div>
+                        <button onclick="toggleAudio('audio-waves', this)" class="text-teal-400 hover:text-teal-600 transition transform hover:scale-110"><i class="fa-solid fa-circle-play text-2xl md:text-3xl"></i></button>
+                    </div>
+
+                    <!-- Track 3: Hutan & Burung -->
+                    <div class="flex items-center justify-between p-3 border rounded-xl hover:bg-gray-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-pastel-green rounded-full flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-tree"></i></div>
+                            <div><p class="font-bold text-sm md:text-base">Hutan & Kicauan Burung</p><p class="text-[10px] md:text-xs text-gray-400">Suara Alam • Meditasi Pagi</p></div>
+                        </div>
+                        <button onclick="toggleAudio('audio-forest', this)" class="text-green-500 hover:text-green-700 transition transform hover:scale-110"><i class="fa-solid fa-circle-play text-2xl md:text-3xl"></i></button>
+                    </div>
+
+                    <!-- Track 4: Api Unggun -->
+                    <div class="flex items-center justify-between p-3 border rounded-xl hover:bg-gray-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-pastel-yellow rounded-full flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-fire"></i></div>
+                            <div><p class="font-bold text-sm md:text-base">Kehangatan Api Unggun</p><p class="text-[10px] md:text-xs text-gray-400">Suara Alam • Pengantar Tidur</p></div>
+                        </div>
+                        <button onclick="toggleAudio('audio-fire', this)" class="text-yellow-500 hover:text-yellow-600 transition transform hover:scale-110"><i class="fa-solid fa-circle-play text-2xl md:text-3xl"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONSULTASI PAGE -->
+        <section id="page-konsultasi" class="page-section hidden animate-fade-in max-w-5xl mx-auto py-8 md:py-10">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Konsultasi Psikolog</h2>
+                <div class="w-20 md:w-24 h-1 bg-pastel-teal mx-auto rounded-full mb-4 md:mb-6"></div>
+                <p class="text-sm md:text-base text-gray-500 px-4">Temukan profesional yang tepat untuk mendampingi perjalanan pulihmu.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Card Psikolog 1 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-md border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-20 md:h-24 bg-pastel-blue opacity-20 group-hover:opacity-40 transition"></div>
+                    <img src="https://ui-avatars.com/api/?name=Dr+Sarah&background=random" class="w-16 h-16 md:w-20 md:h-20 rounded-full mx-auto relative z-10 border-4 border-white shadow-sm mb-3 md:mb-4">
+                    <h3 class="font-bold text-base md:text-lg">Dr. Sarah Anindita</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-pastel-teal mb-2">Psikolog Klinis Dewasa</p>
+                    <p class="text-xs md:text-sm text-gray-500 mb-4 line-clamp-2">Fokus pada gangguan kecemasan, panic attack, dan depresi mayor.</p>
+                    <button class="w-full border-2 border-pastel-teal text-pastel-teal rounded-full py-2 text-sm md:text-base font-bold hover:bg-pastel-teal hover:text-white transition">Jadwalkan</button>
+                </div>
+                <!-- Card Psikolog 2 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-md border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-20 md:h-24 bg-pastel-pink opacity-20 group-hover:opacity-40 transition"></div>
+                    <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=random" class="w-16 h-16 md:w-20 md:h-20 rounded-full mx-auto relative z-10 border-4 border-white shadow-sm mb-3 md:mb-4">
+                    <h3 class="font-bold text-base md:text-lg">Budi Santoso, M.Psi</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-pastel-pink mb-2">Psikolog Industri & Organisasi</p>
+                    <p class="text-xs md:text-sm text-gray-500 mb-4 line-clamp-2">Ahli dalam penanganan Burnout, stress kerja, dan quarter-life crisis.</p>
+                    <button class="w-full border-2 border-pastel-teal text-pastel-teal rounded-full py-2 text-sm md:text-base font-bold hover:bg-pastel-teal hover:text-white transition">Jadwalkan</button>
+                </div>
+                <!-- Card Psikolog 3 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-md border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-20 md:h-24 bg-pastel-yellow opacity-20 group-hover:opacity-40 transition"></div>
+                    <img src="https://ui-avatars.com/api/?name=Diana+P&background=random" class="w-16 h-16 md:w-20 md:h-20 rounded-full mx-auto relative z-10 border-4 border-white shadow-sm mb-3 md:mb-4">
+                    <h3 class="font-bold text-base md:text-lg">Diana Putri, M.Psi</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-yellow-600 mb-2">Psikolog Hubungan & Keluarga</p>
+                    <p class="text-xs md:text-sm text-gray-500 mb-4 line-clamp-2">Konseling trauma masa kecil, masalah keluarga, dan relationship toxic.</p>
+                    <button class="w-full border-2 border-pastel-teal text-pastel-teal rounded-full py-2 text-sm md:text-base font-bold hover:bg-pastel-teal hover:text-white transition">Jadwalkan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEMAN BICARA (Peer to Peer Chat UI) -->
+        <section id="page-chat" class="page-section hidden animate-fade-in max-w-4xl mx-auto w-full">
+            <div class="bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden flex flex-col h-[85vh] md:h-[75vh] w-full border border-gray-100">
+                <!-- Chat Header -->
+                <div class="bg-pastel-teal p-3 md:p-4 flex items-center justify-between text-white shadow-sm z-10">
+                    <div class="flex items-center gap-3 md:gap-4">
+                        <button onclick="navigate('home')" class="hover:bg-teal-600 p-2 rounded-full transition"><i class="fa-solid fa-arrow-left"></i></button>
+                        <div class="relative hidden sm:block">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center text-lg md:text-xl backdrop-blur-sm border-2 border-white">
+                                <i class="fa-solid fa-user-secret"></i>
+                            </div>
+                            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-400 rounded-full border-2 border-white"></div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base md:text-lg leading-tight">Anonim #4829</h3>
+                            <p class="text-[10px] md:text-xs opacity-90"><i class="fa-solid fa-user-group text-[8px] md:text-[10px] mr-1"></i> Sesama Pengguna MindCare</p>
+                        </div>
+                    </div>
+                    <button class="bg-red-500 hover:bg-red-600 text-[10px] md:text-xs px-2 md:px-3 py-1.5 md:py-1.5 rounded-full font-semibold transition whitespace-nowrap">Akhiri Obrolan</button>
+                </div>
+                
+                <!-- Chat Body -->
+                <div id="chat-messages" class="flex-grow bg-[#F8FAFC] p-4 md:p-6 overflow-y-auto space-y-3 md:space-y-4 scroll-smooth">
+                    <div class="flex justify-center">
+                        <div class="bg-blue-50 text-blue-600 text-[10px] md:text-xs px-3 md:px-4 py-1.5 md:py-2 rounded-full font-medium border border-blue-100 flex items-center gap-2 text-center max-w-[90%] md:max-w-full">
+                            <i class="fa-solid fa-shield-halved shrink-0"></i> Anda kini terhubung secara anonim. Jaga kesopanan & privasi.
+                        </div>
+                    </div>
+                    
+                    <!-- Bot initial message -->
+                    <div class="flex gap-2 md:gap-3">
+                        <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-300 rounded-full flex items-center justify-center text-white text-[10px] md:text-xs shrink-0 mt-1"><i class="fa-solid fa-user"></i></div>
+                        <div class="bg-white p-3 md:p-4 rounded-2xl shadow-sm text-xs md:text-sm text-gray-700 max-w-[85%] md:max-w-[70%] border border-gray-100 rounded-tl-sm">
+                            Halo... salam kenal. Boleh aku cerita sedikit? Hari ini rasanya berat banget buatku...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="p-3 md:p-4 bg-white border-t flex gap-2 items-center">
+                    <button class="text-gray-400 hover:text-pastel-teal p-1 md:p-2 hidden sm:block"><i class="fa-solid fa-face-smile text-lg md:text-xl"></i></button>
+                    <input id="chat-input" type="text" placeholder="Ketik pesan..." class="flex-grow bg-gray-100 rounded-full px-4 md:px-6 py-2 md:py-3 focus:outline-none focus:ring-2 focus:ring-pastel-teal text-xs md:text-sm">
+                    <button id="chat-send-btn" onclick="sendMessage()" class="bg-pastel-teal text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center hover:bg-teal-700 transition shadow-md shrink-0">
+                        <i class="fa-solid fa-paper-plane text-sm md:text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TES KESEHATAN MENTAL -->
+        <section id="page-test" class="page-section hidden animate-fade-in max-w-2xl mx-auto w-full py-6 md:py-8">
+            <div class="mb-6 md:mb-8 px-2 md:px-0">
+                <div class="flex justify-between text-xs md:text-sm font-bold text-gray-500 mb-2">
+                    <span id="progress-text">Pertanyaan 1 dari 5</span>
+                    <span id="progress-percent" class="text-pastel-teal transition-all duration-300">20%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 md:h-3 overflow-hidden">
+                    <div id="progress-bar" class="bg-pastel-teal h-2 md:h-3 rounded-full transition-all duration-500 ease-out" style="width: 20%"></div>
+                </div>
+            </div>
+            <div id="quiz-container" class="relative min-h-[400px] overflow-hidden pt-2">
+                <!-- Dihasilkan oleh JS -->
+            </div>
+        </section>
+
+        <!-- HASIL TES & HUB LAYANAN -->
+        <section id="page-result" class="page-section hidden animate-fade-in py-6 md:py-10">
+            <div class="max-w-5xl mx-auto px-2 md:px-0">
+                
+                <!-- Header Hasil & Cerita -->
+                <div class="glass-card p-6 md:p-10 rounded-2xl md:rounded-3xl text-center mb-8 md:mb-10 relative overflow-hidden flex flex-col items-center">
+                    <div class="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-pastel-yellow rounded-bl-full opacity-30"></div>
+                    
+                    <h2 class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest mb-2 mt-2 md:mt-0">Hasil Tes Perasaanmu</h2>
+                    
+                    <div id="mood-visual" class="text-6xl md:text-8xl mb-4 md:mb-6 transform transition hover:scale-110"></div>
+                    <h3 id="mood-title" class="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-pastel-teal px-2">...</h3>
+                    
+                    <div class="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm text-gray-700 italic text-sm md:text-lg leading-relaxed border-l-4 border-pastel-teal text-left w-full mb-6">
+                        "<span id="story-content">...</span>"
+                    </div>
+
+                    <!-- MOOD TRACKER (Grafik Emosi) -->
+                    <div class="w-full border-t border-gray-100 pt-6 mt-2">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-5 flex items-center justify-center gap-2"><i class="fa-solid fa-chart-simple"></i> Mood Tracker Detail</h4>
+                        <div class="space-y-4 text-left max-w-md mx-auto">
+                            <!-- Energi -->
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-1.5"><span class="text-gray-600">Tingkat Energi</span><span id="tracker-energi-txt" class="text-yellow-600">0%</span></div>
+                                <div class="w-full bg-gray-100 rounded-full h-2 md:h-2.5 overflow-hidden"><div id="tracker-energi" class="bg-yellow-400 h-2 md:h-2.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            </div>
+                            <!-- Stres -->
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-1.5"><span class="text-gray-600">Beban Stres</span><span id="tracker-stres-txt" class="text-red-500">0%</span></div>
+                                <div class="w-full bg-gray-100 rounded-full h-2 md:h-2.5 overflow-hidden"><div id="tracker-stres" class="bg-red-400 h-2 md:h-2.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            </div>
+                            <!-- Ketenangan -->
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-1.5"><span class="text-gray-600">Ketenangan Batin</span><span id="tracker-tenang-txt" class="text-blue-500">0%</span></div>
+                                <div class="w-full bg-gray-100 rounded-full h-2 md:h-2.5 overflow-hidden"><div id="tracker-tenang" class="bg-blue-400 h-2 md:h-2.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JUDUL LAYANAN -->
+                <div class="text-center mb-6 md:mb-8">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">Layanan Khusus Untukmu</h3>
+                    <p class="text-sm md:text-base text-gray-500 px-4">Berdasarkan hasil tes, kami telah menyiapkan layanan berikut.</p>
+                </div>
+
+                <!-- 5 LAYANAN UTAMA -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-12">
+                    
+                    <!-- 1. Artikel -->
+                    <div onclick="navigate('artikel')" class="bg-white rounded-xl md:rounded-2xl p-5 md:p-6 shadow-md border-t-4 border-blue-400 hover:-translate-y-1 transition transform cursor-pointer group">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-blue-500 group-hover:text-white transition">
+                            <i class="fa-solid fa-newspaper text-blue-500 group-hover:text-white text-lg md:text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2">Artikel Terkait</h4>
+                        <p id="rec-artikel" class="text-xs md:text-sm text-gray-600 line-clamp-2">Memuat artikel...</p>
+                        <div class="mt-3 md:mt-4 text-blue-500 text-xs md:text-sm font-semibold flex items-center gap-1">Baca Selengkapnya <i class="fa-solid fa-arrow-right text-[10px] md:text-xs"></i></div>
+                    </div>
+
+                    <!-- 2. Modul -->
+                    <div onclick="navigate('modul')" class="bg-white rounded-xl md:rounded-2xl p-5 md:p-6 shadow-md border-t-4 border-green-400 hover:-translate-y-1 transition transform cursor-pointer group">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-green-500 group-hover:text-white transition">
+                            <i class="fa-solid fa-book-open text-green-500 group-hover:text-white text-lg md:text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2">Modul Pembelajaran</h4>
+                        <p id="rec-modul" class="text-xs md:text-sm text-gray-600 line-clamp-2">Memuat modul...</p>
+                        <div class="mt-3 md:mt-4 text-green-500 text-xs md:text-sm font-semibold flex items-center gap-1">Mulai Belajar <i class="fa-solid fa-arrow-right text-[10px] md:text-xs"></i></div>
+                    </div>
+
+                    <!-- 3. Meditasi -->
+                    <div onclick="navigate('meditasi')" class="bg-white rounded-xl md:rounded-2xl p-5 md:p-6 shadow-md border-t-4 border-purple-400 hover:-translate-y-1 transition transform cursor-pointer group sm:col-span-2 lg:col-span-1">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-purple-500 group-hover:text-white transition">
+                            <i class="fa-solid fa-headphones text-purple-500 group-hover:text-white text-lg md:text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2">Sesi Meditasi</h4>
+                        <p id="rec-meditasi" class="text-xs md:text-sm text-gray-600 line-clamp-2">Memuat panduan meditasi...</p>
+                        <div class="mt-3 md:mt-4 text-purple-500 text-xs md:text-sm font-semibold flex items-center gap-1">Mulai Dengarkan <i class="fa-solid fa-play text-[10px] md:text-xs"></i></div>
+                    </div>
+
+                    <!-- 4. Seminar & 5. Komunitas (Combined logic for responsiveness) -->
+                    <div onclick="navigate('seminar')" class="bg-white rounded-xl md:rounded-2xl p-5 md:p-6 shadow-md border-t-4 border-yellow-400 hover:-translate-y-1 transition transform cursor-pointer group">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-yellow-100 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-yellow-500 group-hover:text-white transition">
+                            <i class="fa-solid fa-calendar-star text-yellow-600 group-hover:text-white text-lg md:text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2">Seminar & Workshop</h4>
+                        <p id="rec-seminar" class="text-xs md:text-sm text-gray-600 line-clamp-2">Memuat jadwal seminar...</p>
+                        <div class="mt-3 md:mt-4 text-yellow-600 text-xs md:text-sm font-semibold flex items-center gap-1">Daftar Event <i class="fa-solid fa-arrow-right text-[10px] md:text-xs"></i></div>
+                    </div>
+
+                    <div class="bg-white rounded-xl md:rounded-2xl p-5 md:p-6 shadow-md border-t-4 border-pink-400 hover:-translate-y-1 transition transform group sm:col-span-2 lg:col-span-2">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-pink-100 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-pink-500 group-hover:text-white transition cursor-pointer" onclick="navigate('komunitas')">
+                            <i class="fa-solid fa-users text-pink-500 group-hover:text-white text-lg md:text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2 cursor-pointer" onclick="navigate('komunitas')">Komunitas Support</h4>
+                        <p id="rec-komunitas" class="text-xs md:text-sm text-gray-600 mb-3 cursor-pointer" onclick="navigate('komunitas')">Memuat grup komunitas...</p>
+                        <div class="flex flex-col sm:flex-row gap-2 md:gap-4 mt-2">
+                            <button onclick="navigate('komunitas')" class="bg-pink-50 hover:bg-pink-100 text-pink-600 text-xs md:text-sm px-3 md:px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 w-full sm:w-auto">
+                                <i class="fa-solid fa-users-rectangle shrink-0"></i> Telusuri Komunitas
+                            </button>
+                            <button onclick="navigate('chat')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs md:text-sm px-3 md:px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 w-full sm:w-auto">
+                                <i class="fa-solid fa-user-secret shrink-0"></i> Teman Bicara Anonim
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- REKOMENDASI HARIAN -->
+                <div class="text-center mb-6 md:mb-8 mt-12 md:mt-16">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">Rekomendasi Harian Terpersonalisasi</h3>
+                    <p class="text-sm md:text-base text-gray-500 px-4">Hal-hal kecil yang bisa membantumu merasa lebih baik hari ini.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
+                    <!-- Kegiatan -->
+                    <div class="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-sm border-t-4 border-pastel-green hover:shadow-md transition">
+                        <div class="flex items-center gap-3 mb-3 md:mb-4">
+                            <div class="w-8 h-8 md:w-10 md:h-10 bg-green-50 rounded-full flex items-center justify-center text-pastel-green text-base md:text-lg shrink-0"><i class="fa-solid fa-person-running"></i></div>
+                            <h4 class="font-bold text-sm md:text-base text-gray-800">Kegiatan</h4>
+                        </div>
+                        <ul id="rec-kegiatan" class="text-xs md:text-sm text-gray-600 space-y-1.5 md:space-y-2 list-disc pl-4 marker:text-pastel-green">
+                            <li>Memuat...</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Makanan -->
+                    <div class="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-sm border-t-4 border-pastel-yellow hover:shadow-md transition">
+                        <div class="flex items-center gap-3 mb-3 md:mb-4">
+                            <div class="w-8 h-8 md:w-10 md:h-10 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-500 text-base md:text-lg shrink-0"><i class="fa-solid fa-bowl-food"></i></div>
+                            <h4 class="font-bold text-sm md:text-base text-gray-800">Makanan</h4>
+                        </div>
+                        <ul id="rec-makanan" class="text-xs md:text-sm text-gray-600 space-y-1.5 md:space-y-2 list-disc pl-4 marker:text-pastel-yellow">
+                            <li>Memuat...</li>
+                        </ul>
+                    </div>
+
+                    <!-- Musik -->
+                    <div class="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-sm border-t-4 border-pastel-blue hover:shadow-md transition">
+                        <div class="flex items-center gap-3 mb-3 md:mb-4">
+                            <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-50 rounded-full flex items-center justify-center text-pastel-blue text-base md:text-lg shrink-0"><i class="fa-solid fa-music"></i></div>
+                            <h4 class="font-bold text-sm md:text-base text-gray-800">Musik</h4>
+                        </div>
+                        <ul id="rec-musik" class="text-xs md:text-sm text-gray-600 space-y-1.5 md:space-y-2 list-disc pl-4 marker:text-pastel-blue">
+                            <li>Memuat...</li>
+                        </ul>
+                    </div>
+
+                    <!-- Mini Games -->
+                    <div class="bg-white p-5 md:p-6 rounded-xl md:rounded-2xl shadow-sm border-t-4 border-pastel-purple hover:shadow-md transition">
+                        <div class="flex items-center gap-3 mb-3 md:mb-4">
+                            <div class="w-8 h-8 md:w-10 md:h-10 bg-purple-50 rounded-full flex items-center justify-center text-pastel-purple text-base md:text-lg shrink-0"><i class="fa-solid fa-gamepad"></i></div>
+                            <h4 class="font-bold text-sm md:text-base text-gray-800">Mini Game</h4>
+                        </div>
+                        <ul id="rec-minigame" class="text-xs md:text-sm text-gray-600 space-y-1.5 md:space-y-2 list-disc pl-4 marker:text-pastel-purple">
+                            <li>Memuat...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- REKOMENDASI PSIKOLOG -->
+                <div class="bg-pastel-teal rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
+                    <div class="absolute right-0 bottom-0 opacity-10 text-6xl md:text-9xl transform translate-x-1/4 translate-y-1/4"><i class="fa-solid fa-user-doctor"></i></div>
+                    <div class="w-full md:w-2/3 z-10 mb-5 md:mb-0 text-center md:text-left">
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 flex items-center justify-center md:justify-start gap-2">
+                            <i class="fa-solid fa-stethoscope shrink-0"></i> Rekomendasi Psikolog
+                        </h3>
+                        <p class="text-teal-50 text-sm md:text-base mb-4">Mengingat gejala yang dialami, kami menyarankan agar kamu berkonsultasi dengan ahlinya.</p>
+                        <div class="bg-white/20 p-3 md:p-4 rounded-xl backdrop-blur-sm border border-white/30 text-left">
+                            <p class="text-xs md:text-sm text-teal-100 mb-1">Psikolog yang disarankan:</p>
+                            <p id="rec-psikolog-tipe" class="font-bold text-base md:text-lg">Psikolog Klinis Dewasa</p>
+                            <p id="rec-psikolog-fokus" class="text-xs md:text-sm mt-1"><i class="fa-solid fa-bullseye text-teal-200 mr-1"></i> Fokus: Penanganan stres & kecemasan.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 z-10 flex justify-center md:justify-end">
+                        <button onclick="navigate('konsultasi')" class="w-full md:w-auto bg-white text-pastel-teal font-bold py-3 md:py-3 px-6 md:px-8 rounded-xl md:rounded-full shadow-lg hover:bg-gray-100 transition transform hover:scale-105 text-sm md:text-base">
+                            Lihat Jadwal Psikolog
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8 md:mt-10 pb-6">
+                    <button onclick="navigate('home')" class="text-gray-400 font-bold hover:text-pastel-teal transition text-sm md:text-base">
+                        <i class="fa-solid fa-home mr-1"></i> Kembali ke Beranda
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN ABOUT US -->
+        <section id="page-about" class="page-section hidden animate-fade-in max-w-6xl mx-auto py-8 md:py-16 px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Tentang MindCare</h2>
+                <div class="w-20 md:w-24 h-1 bg-pastel-teal mx-auto rounded-full mb-6"></div>
+                <p class="text-sm md:text-base text-gray-500 max-w-2xl mx-auto">Kami hadir untuk memastikan setiap orang memiliki ruang aman untuk bercerita, belajar, dan memulihkan kesehatan mentalnya.</p>
+            </div>
+
+            <!-- STATISTIK (Sesuai Desain, Tanpa Rating) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8 mb-16 md:mb-24">
+                <!-- Stat 1 -->
+                <div class="bg-[#f2f9f8] rounded-2xl md:rounded-3xl p-6 md:p-10 text-center hover:shadow-md transition duration-300">
+                    <svg class="mx-auto mb-4 text-[#209686]" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <h3 class="text-3xl md:text-4xl font-bold text-[#1f8779] mb-1 md:mb-2">500+</h3>
+                    <p class="text-gray-500 text-xs md:text-sm font-medium">Psikolog Profesional</p>
+                </div>
+                <!-- Stat 2 -->
+                <div class="bg-[#f2f9f8] rounded-2xl md:rounded-3xl p-6 md:p-10 text-center hover:shadow-md transition duration-300">
+                    <svg class="mx-auto mb-4 text-[#209686]" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <h3 class="text-3xl md:text-4xl font-bold text-[#1f8779] mb-1 md:mb-2">10,000+</h3>
+                    <p class="text-gray-500 text-xs md:text-sm font-medium">Pengguna Aktif</p>
+                </div>
+                <!-- Stat 3 (Sesi Konsultasi) -->
+                <div class="bg-[#f2f9f8] rounded-2xl md:rounded-3xl p-6 md:p-10 text-center hover:shadow-md transition duration-300">
+                    <svg class="mx-auto mb-4 text-[#209686]" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <h3 class="text-3xl md:text-4xl font-bold text-[#1f8779] mb-1 md:mb-2">50,000+</h3>
+                    <p class="text-gray-500 text-xs md:text-sm font-medium">Sesi Konsultasi</p>
+                </div>
+            </div>
+
+            <!-- MISI KAMI (Sesuai Desain) -->
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Misi Kami</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <!-- Misi 1 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl p-8 md:p-10 text-center shadow-md border border-gray-50 hover:-translate-y-2 transition duration-300">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-[#e9f5f4] rounded-2xl flex items-center justify-center mx-auto mb-5 md:mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#209686" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-gray-800">Aksesibilitas</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Membuat layanan kesehatan mental mudah diakses oleh semua orang di Indonesia, kapan pun dan di mana pun.</p>
+                </div>
+                <!-- Misi 2 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl p-8 md:p-10 text-center shadow-md border border-gray-50 hover:-translate-y-2 transition duration-300">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-[#e9f5f4] rounded-2xl flex items-center justify-center mx-auto mb-5 md:mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#209686" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-gray-800">Edukasi</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Meningkatkan kesadaran dan pemahaman masyarakat tentang pentingnya kesehatan mental melalui edukasi berkelanjutan.</p>
+                </div>
+                <!-- Misi 3 -->
+                <div class="bg-white rounded-2xl md:rounded-3xl p-8 md:p-10 text-center shadow-md border border-gray-50 hover:-translate-y-2 transition duration-300">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-[#e9f5f4] rounded-2xl flex items-center justify-center mx-auto mb-5 md:mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#209686" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-gray-800">Koneksi</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Menghubungkan individu yang membutuhkan dengan psikolog profesional dan komunitas suportif.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white mt-auto py-6 md:py-8 border-t border-gray-100 w-full">
+        <div class="container mx-auto px-4 md:px-6 text-center md:flex justify-between items-center">
+            <div class="mb-3 md:mb-0 text-pastel-teal font-bold text-lg md:text-xl flex items-center justify-center md:justify-start gap-2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="text-pastel-teal">
+                    <path d="M12 2C12 2 8 7 8 11.5C8 13.9853 10.0147 16 12 16C13.9853 16 16 13.9853 16 11.5C16 7 12 2 12 2Z" />
+                    <path d="M21.5 11C21.5 11 17 9 14.5 12C13 13.8 13 17 13 17C13 17 17 18.5 20.5 15.5C23.3 13.3 21.5 11 21.5 11Z" />
+                    <path d="M2.5 11C2.5 11 7 9 9.5 12C11 13.8 11 17 11 17C11 17 7 18.5 3.5 15.5C0.7 13.3 2.5 11 2.5 11Z" />
+                </svg>
+                MindCare
+            </div>
+            <p class="text-gray-400 text-xs md:text-sm">© 2026 MindCare. Kesehatan Mental Anda, Prioritas Kami.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. ROUTING SYSTEM & MOBILE MENU ---
+        function navigate(pageId) {
+            document.querySelectorAll('.page-section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('animate-fade-in');
+            });
+            const target = document.getElementById('page-' + pageId);
+            if(target) {
+                target.classList.remove('hidden');
+                void target.offsetWidth; 
+                target.classList.add('animate-fade-in');
+            }
+            window.scrollTo(0, 0);
+            if(pageId === 'test') initQuiz();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-overlay');
+            menu.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('opacity-0');
+            overlay.classList.toggle('pointer-events-none');
+        }
+
+        function navigateMobile(pageId) {
+            navigate(pageId);
+            toggleMobileMenu();
+        }
+
+        function toggleMobileSubmenu() {
+            const submenu = document.getElementById('mobile-submenu');
+            const icon = document.getElementById('mobile-submenu-icon');
+            if(submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                submenu.classList.add('flex');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.classList.add('hidden');
+                submenu.classList.remove('flex');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // --- 2. STORYTELLING QUIZ LOGIC ---
+        const questions = [
+            {
+                q: "Bagaimana warna langit di pikiranmu hari ini?",
+                options: [
+                    { text: "Cerah dengan sedikit awan", icon: "fa-sun text-yellow-400", type: "peaceful", story: "terasa cerah, meski ada sedikit awan keraguan" },
+                    { text: "Abu-abu mendung", icon: "fa-cloud text-gray-400", type: "tired", story: "terasa abu-abu dan mendung, seolah menyimpan beban" },
+                    { text: "Gelap dan berangin kencang", icon: "fa-cloud-bolt text-gray-700", type: "anxious", story: "terasa gelap dan penuh badai kecemasan" },
+                    { text: "Penuh warna tak beraturan", icon: "fa-rainbow text-pink-400", type: "overwhelmed", story: "dipenuhi banyak warna yang bertabrakan, membuatmu kewalahan" }
+                ]
+            },
+            {
+                q: "Saat ada beban berat, apa yang biasanya kamu lakukan secara refleks?",
+                options: [
+                    { text: "Menarik diri / menyendiri", icon: "fa-door-closed text-blue-400", type: "tired", story: "kamu memilih untuk mundur sejenak, mengunci pintu dan bersembunyi dari keramaian" },
+                    { text: "Mencari teman bercerita", icon: "fa-user-group text-green-400", type: "social", story: "kamu berusaha mencari sosok yang bisa memeluk dan mendengarkan keluh kesahmu" },
+                    { text: "Menyibukkan diri bekerja", icon: "fa-laptop text-purple-400", type: "anxious", story: "kamu mengalihkan rasa sakit itu dengan terus memaksakan diri bekerja" },
+                    { text: "Menangis hingga tertidur", icon: "fa-droplet text-blue-400", type: "overwhelmed", story: "kamu membiarkan air mata mengalir bebas sebagai cara untuk bernapas" }
+                ]
+            },
+            {
+                q: "Apa yang paling kamu butuhkan dari dunia saat ini?",
+                options: [
+                    { text: "Pengakuan telah berjuang", icon: "fa-medal text-yellow-500", type: "overwhelmed", story: "validasi bahwa semua perjuanganmu selama ini terlihat" },
+                    { text: "Waktu jeda tanpa dituntut", icon: "fa-pause text-gray-500", type: "tired", story: "sebuah tombol jeda, waktu untuk diam tanpa ada ekspektasi" },
+                    { text: "Pelukan hangat yang tulus", icon: "fa-hands-holding text-pink-400", type: "social", story: "sebuah pelukan erat dan hangat yang mengatakan 'semua akan baik-baik saja'" },
+                    { text: "Kepastian masa depan", icon: "fa-compass text-blue-400", type: "anxious", story: "sebuah kompas kepastian agar langkahmu ke depan tidak lagi terasa menakutkan" }
+                ]
+            },
+            {
+                q: "Benda apa yang paling ingin kamu dekap saat ini?",
+                options: [
+                    { text: "Bantal empuk & nyaman", icon: "fa-bed text-blue-400", type: "tired", story: "memeluk bantal empuk untuk meredakan penat di kepalamu" },
+                    { text: "Tangan seseorang", icon: "fa-hand-holding-heart text-pink-400", type: "social", story: "menggenggam tangan seseorang yang memberimu rasa aman" },
+                    { text: "Selimut tebal pelindung", icon: "fa-mattress-pillow text-purple-400", type: "overwhelmed", story: "bersembunyi di balik selimut tebal dari bisingnya dunia" },
+                    { text: "Secangkir minuman hangat", icon: "fa-mug-hot text-yellow-500", type: "peaceful", story: "menyesap minuman hangat yang menenangkan jiwamu" }
+                ]
+            },
+            {
+                q: "Kalimat bisikan mana yang paling menenangkanmu?",
+                options: [
+                    { text: "\"Kamu berhak istirahat.\"", icon: "fa-battery-quarter text-gray-500", type: "tired", story: "mendengar kalimat yang mengizinkanmu untuk berhenti sejenak dan bernapas" },
+                    { text: "\"Semua akan baik-baik saja.\"", icon: "fa-leaf text-green-400", type: "anxious", story: "mendapat janji manis bahwa kecemasan ini pasti akan berlalu" },
+                    { text: "\"Tak harus pikul ini sendiri.\"", icon: "fa-people-carry-box text-blue-400", type: "overwhelmed", story: "sebuah pengingat bahwa kamu tidak perlu menjadi kuat setiap saat" },
+                    { text: "\"Aku di sini bersamamu.\"", icon: "fa-user-group text-pink-400", type: "social", story: "merasakan kehadiran seseorang yang tulus menemani langkahmu" }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+
+        function initQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-container');
+            const q = questions[currentQuestion];
+            
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-text').innerText = `Pertanyaan ${currentQuestion + 1} dari ${questions.length}`;
+            
+            // Animasi text persentase angka pada Progress Bar
+            let currentPercent = parseInt(document.getElementById('progress-percent').innerText) || 0;
+            const targetPercent = Math.round(progress);
+            const counter = setInterval(() => {
+                if (currentPercent < targetPercent) {
+                    currentPercent++;
+                    document.getElementById('progress-percent').innerText = `${currentPercent}%`;
+                } else {
+                    clearInterval(counter);
+                }
+            }, 10);
+
+            let html = `
+                <div class="question-card bg-white p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-md border border-gray-50 mx-2 md:mx-0">
+                    <h3 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-center">${q.q}</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                        ${q.options.map((opt, index) => `
+                            <button onclick="answerQuestion(${index})" class="text-left p-3 md:p-4 rounded-xl md:rounded-2xl border-2 border-gray-100 hover:border-pastel-teal hover:bg-teal-50 hover:shadow-sm transition group flex items-center gap-3 md:gap-4">
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-white shadow-sm transition shrink-0">
+                                    <i class="fa-solid ${opt.icon} text-lg md:text-xl transform group-hover:scale-110 transition"></i>
+                                </div>
+                                <span class="font-medium text-sm md:text-base text-gray-700 group-hover:text-pastel-teal leading-tight">${opt.text}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            const oldCard = container.querySelector('.question-card');
+            
+            if(oldCard) {
+                // Beri efek slideshow (old exit, new enter)
+                oldCard.classList.remove('slide-enter');
+                oldCard.classList.add('slide-exit');
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const newCard = tempDiv.firstElementChild;
+                newCard.classList.add('slide-enter');
+                container.appendChild(newCard);
+                
+                setTimeout(() => {
+                    if(oldCard.parentNode) oldCard.parentNode.removeChild(oldCard);
+                }, 400); // Sinkron dengan durasi animasi slideOut
+            } else {
+                container.innerHTML = html;
+                container.querySelector('.question-card').classList.add('slide-enter');
+            }
+        }
+
+        function answerQuestion(optionIndex) {
+            // Nonaktifkan tombol sementara saat animasi berlangsung agar tidak diklik dua kali
+            const buttons = document.querySelectorAll('#quiz-container button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            userAnswers.push(questions[currentQuestion].options[optionIndex]);
+            
+            // Beri sedikit jeda agar klik terasa memuaskan sebelum geser
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    renderQuestion();
+                } else {
+                    generateResult();
+                }
+            }, 300);
+        }
+
+        function generateResult() {
+            let types = { peaceful:0, tired:0, anxious:0, overwhelmed:0, social:0 };
+            userAnswers.forEach(ans => types[ans.type]++);
+            let dominantType = Object.keys(types).reduce((a, b) => types[a] > types[b] ? a : b);
+
+            let story = `Hari ini, langit di pikiranmu ${userAnswers[0].story}. Saat beban terasa semakin berat, ${userAnswers[1].story}. Di saat-saat seperti ini, kamu hanya ingin ${userAnswers[3].story}. Ketahuilah bahwa perasaanmu valid. Yang paling kamu butuhkan dari dunia saat ini adalah ${userAnswers[2].story}, dan ${userAnswers[4].story}.`;
+
+            // Data rekomendasi layanan khusus + Harian + MOOD TRACKER
+            const resultData = {
+                tired: {
+                    title: "Lelah Fisik & Emosi (Burnout)", emoji: "🔋",
+                    artikel: "Memahami Burnout: Saat Lelah Bukan Kurang Tidur",
+                    modul: "Modul 1: Rest & Recovery (Seni Beristirahat)",
+                    seminar: "Webinar: Overcoming Hustle Culture & Burnout",
+                    komunitas: "Grup Dukungan: Mahasiswa & Pekerja Anti-Burnout",
+                    meditasi: "Audio Meditasi: Melepaskan Beban di Pundak",
+                    psikolog: { tipe: "Psikolog Industri/Organisasi", fokus: "Penanganan stres kerja, akademik, dan Burnout Syndrome." },
+                    kegiatan: ["Tidur lebih awal malam ini", "Mandi air hangat", "Digital detox sebelum tidur"],
+                    makanan: ["Teh Chamomile hangat", "Pisang / Dark Chocolate", "Oatmeal madu"],
+                    musik: ["Playlist 'Lo-Fi Sleep/Study'", "Musik Akustik Santai"],
+                    minigame: ["Zen Koi (Game ikan santai)", "Puzzle (Jigsaw)"],
+                    tracker: { energi: 25, stres: 75, tenang: 40 }
+                },
+                anxious: {
+                    title: "Gelisah & Cemas (Anxiety)", emoji: "🌪️",
+                    artikel: "Pertolongan Pertama Saat Panic Attack",
+                    modul: "Modul 2: Mengelola Pikiran Cemas (CBT Basic)",
+                    seminar: "Workshop Online: Art Therapy untuk Kecemasan",
+                    komunitas: "Lingkaran Aman: Pejuang Anxiety Indonesia",
+                    meditasi: "Audio Meditasi: Grounding Technique 5-4-3-2-1",
+                    psikolog: { tipe: "Psikolog Klinis Dewasa", fokus: "Terapi gangguan kecemasan (Anxiety Disorder)." },
+                    kegiatan: ["Latihan pernapasan 4-7-8", "Jalan kaki santai 15 menit", "Mewarnai buku gambar"],
+                    makanan: ["Alpukat / Kacang Almond", "Yogurt segar", "Banyak minum air putih"],
+                    musik: ["Suara alam (Hujan/Ombak)", "Binaural beats fokus"],
+                    minigame: ["Antistress (Mainan Virtual)", "Merawat tanaman (Viridi)"],
+                    tracker: { energi: 45, stres: 85, tenang: 15 }
+                },
+                overwhelmed: {
+                    title: "Kewalahan & Overthinking", emoji: "🤯",
+                    artikel: "Menghentikan Siklus Overthinking di Malam Hari",
+                    modul: "Modul 3: Manajemen Prioritas Pekerjaan",
+                    seminar: "Sesi Interaktif: Decluttering Your Mind",
+                    komunitas: "Forum Mindful Living",
+                    meditasi: "Audio Meditasi: Kembali ke Masa Kini",
+                    psikolog: { tipe: "Psikolog Klinis", fokus: "Manajemen regulasi emosi dan terapi kognitif." },
+                    kegiatan: ["Micro-tasking (pecah tugas)", "Metode Pomodoro", "Coret-coret kertas kosong"],
+                    makanan: ["Buah Berry (Strawberry)", "Smoothie segar", "Ikan kaya Omega-3"],
+                    musik: ["Musik instrumental klasik", "Video ASMR (No-talking)"],
+                    minigame: ["Unpacking (Beres-beres)", "Tetris klasik"],
+                    tracker: { energi: 30, stres: 90, tenang: 20 }
+                },
+                social: {
+                    title: "Kesepian & Butuh Afeksi", emoji: "🫂",
+                    artikel: "Kesepian di Tengah Keramaian, Kenapa?",
+                    modul: "Modul 4: Membangun Koneksi & Boundaries",
+                    seminar: "Sharing Session: Healing from Loneliness",
+                    komunitas: "Grup 'Ruang Cerita' Teman Sepemikiran",
+                    meditasi: "Audio Meditasi: Self-Compassion",
+                    psikolog: { tipe: "Konselor Hubungan & Keluarga", fokus: "Konseling interpersonal dan trust issue." },
+                    kegiatan: ["Hubungi satu teman lama", "Pergi ke taman terbuka", "Layanan Teman Bicara"],
+                    makanan: ["Makanan berkuah (Ramen)", "Jajanan masa kecil"],
+                    musik: ["Podcast ngobrol santai", "Musik Pop ceria (Uplifting)"],
+                    minigame: ["Ludo / UNO Online", "Animal Crossing"],
+                    tracker: { energi: 50, stres: 50, tenang: 30 }
+                },
+                peaceful: {
+                    title: "Cukup Stabil", emoji: "🌱",
+                    artikel: "Menjaga Momentum Positif Sehari-hari",
+                    modul: "Modul 5: Growth Mindset & Self-Actualization",
+                    seminar: "Kelas: Menulis Jurnal Bersyukur",
+                    komunitas: "Komunitas MindCare Rangers",
+                    meditasi: "Audio Meditasi: Afirmasi Pagi Penuh Energi",
+                    psikolog: { tipe: "Life Coach", fokus: "Penggalian potensi diri dan perencanaan." },
+                    kegiatan: ["Pertahankan rutinitas baik", "Coba hobi kreatif baru", "Tulis jurnal bersyukur"],
+                    makanan: ["Menu gizi seimbang", "Buah-buahan segar", "Kopi/Teh favoritmu"],
+                    musik: ["Playlist 'Acoustic Morning'", "Indie Folk yang tenang"],
+                    minigame: ["Stardew Valley", "Tebak kata (Wordscapes)"],
+                    tracker: { energi: 85, stres: 20, tenang: 80 }
+                }
+            };
+
+            const data = resultData[dominantType] || resultData.tired;
+
+            // Injeksi data ke UI
+            document.getElementById('mood-visual').innerText = data.emoji;
+            document.getElementById('mood-title').innerText = data.title;
+            document.getElementById('story-content').innerText = story;
+
+            // Injeksi MOOD TRACKER dengan Animasi
+            setTimeout(() => {
+                document.getElementById('tracker-energi').style.width = data.tracker.energi + '%';
+                document.getElementById('tracker-energi-txt').innerText = data.tracker.energi + '%';
+                document.getElementById('tracker-stres').style.width = data.tracker.stres + '%';
+                document.getElementById('tracker-stres-txt').innerText = data.tracker.stres + '%';
+                document.getElementById('tracker-tenang').style.width = data.tracker.tenang + '%';
+                document.getElementById('tracker-tenang-txt').innerText = data.tracker.tenang + '%';
+            }, 600); // Menunggu transisi halaman selesai sebelum memutar animasi bar
+
+            // Injeksi Layanan Utama
+            document.getElementById('rec-artikel').innerText = data.artikel;
+            document.getElementById('rec-modul').innerText = data.modul;
+            document.getElementById('rec-seminar').innerText = data.seminar;
+            document.getElementById('rec-komunitas').innerText = data.komunitas;
+            document.getElementById('rec-meditasi').innerText = data.meditasi;
+
+            // Injeksi Rekomendasi Harian
+            const mapList = (arr) => arr.map(item => `<li>${item}</li>`).join('');
+            document.getElementById('rec-kegiatan').innerHTML = mapList(data.kegiatan);
+            document.getElementById('rec-makanan').innerHTML = mapList(data.makanan);
+            document.getElementById('rec-musik').innerHTML = mapList(data.musik);
+            document.getElementById('rec-minigame').innerHTML = mapList(data.minigame);
+
+            // Injeksi Konsultasi
+            document.getElementById('rec-psikolog-tipe').innerText = data.psikolog.tipe;
+            document.getElementById('rec-psikolog-fokus').innerHTML = `<i class="fa-solid fa-bullseye text-teal-200 mr-1 text-xs md:text-sm"></i> Fokus: ${data.psikolog.fokus}`;
+
+            setTimeout(() => navigate('result'), 500);
+        }
+
+        // Init & Chat Event Listener
+        document.addEventListener('DOMContentLoaded', () => {
+            navigate('home');
+            
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        // --- 3. FITUR TEMAN BICARA (CHATBOT ANONIM) ---
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return; 
+
+            appendMessage('user', text);
+            input.value = ''; 
+            scrollToBottom();
+
+            showTypingIndicator();
+
+            const delay = 1500 + Math.random() * 1000;
+            setTimeout(() => {
+                removeTypingIndicator();
+                const reply = getBotResponse(text);
+                appendMessage('bot', reply);
+                scrollToBottom();
+            }, delay);
+        }
+
+        function appendMessage(sender, text) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            
+            if (sender === 'user') {
+                div.className = 'flex gap-2 md:gap-3 justify-end animate-fade-in';
+                div.innerHTML = `
+                    <div class="bg-pastel-teal p-3 md:p-4 rounded-2xl shadow-sm text-xs md:text-sm text-white max-w-[85%] md:max-w-[70%] rounded-tr-sm">
+                        ${text}
+                    </div>
+                `;
+            } else {
+                div.className = 'flex gap-2 md:gap-3 animate-fade-in';
+                div.innerHTML = `
+                    <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-300 rounded-full flex items-center justify-center text-white text-[10px] md:text-xs shrink-0 mt-1"><i class="fa-solid fa-user"></i></div>
+                    <div class="bg-white p-3 md:p-4 rounded-2xl shadow-sm text-xs md:text-sm text-gray-700 max-w-[85%] md:max-w-[70%] border border-gray-100 rounded-tl-sm">
+                        ${text}
+                    </div>
+                `;
+            }
+            container.appendChild(div);
+        }
+
+        function showTypingIndicator() {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 md:gap-3 animate-fade-in';
+            div.id = 'typing-indicator';
+            div.innerHTML = `
+                <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-300 rounded-full flex items-center justify-center text-white text-[10px] md:text-xs shrink-0 mt-1"><i class="fa-solid fa-user"></i></div>
+                <div class="bg-white p-3 md:p-4 rounded-2xl shadow-sm max-w-[85%] md:max-w-[70%] border border-gray-100 flex items-center rounded-tl-sm">
+                    <div class="flex space-x-1 items-center h-4 md:h-5">
+                        <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chat-messages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function getBotResponse(text) {
+            const lowerText = text.toLowerCase();
+            if (/\b(iya|mau|boleh|oke|ok|yok|hooh|ya|y|betul|bener)\b/i.test(lowerText) && lowerText.length < 30) return "Sip, ceritain pelan-pelan aja dari awal. Jangan buru-buru, aku di sini dengerin kamu kok.";
+            if (/\b(nggak|enggak|gak|tidak|belum|males|g|tdk)\b/i.test(lowerText) && lowerText.length < 30) return "Nggak apa-apa banget kalau kamu belum siap cerita. Take your time ya. Istirahat dulu aja kalau capek.";
+            if (/\b(bingung|gatau|enggak tau|gak tau|pusing|entahlah|entah)\b/i.test(lowerText)) return "Wajar kok kalau kamu ngerasa bingung. Kadang emosi emang rumit. Tenang dulu ya, tarik napas dalam-dalam. 🫂";
+            if (/\b(halo|hai|hi|pagi|siang|sore|malam|hei|helo)\b/i.test(lowerText)) return "Halo! Senang banget kamu menyapa. Gimana perasaanmu hari ini? Ada yang mau diceritain?";
+            if (/\b(berat|capek|lelah|stres|pusing|muak|bosen|bosan|penat|hancur)\b/i.test(lowerText)) return "Pasti nggak mudah ya ngelewatin semua ini. Wajar kok kalau kamu merasa capek. Mau cerita lebih detail apa yang bikin kamu paling lelah sekarang?";
+            if (/\b(sedih|nangis|kecewa|sakit|nyesek|kesepian|sendiri|putus|patah hati)\b/i.test(lowerText)) return "Aku di sini buat dengerin kamu. Kadang menangis itu cara terbaik buat ngelepasin emosi lho. Gapapa kok, luapin aja semuanya di sini.";
+            if (/\b(takut|cemas|overthinking|gugup|degdegan|khawatir|panik)\b/i.test(lowerText)) return "Rasa cemas itu emang gak enak banget, seolah semuanya di luar kendali kita. Coba tarik napas pelan-pelan yuk. Hal apa sih yang paling kamu khawatirin saat ini?";
+            if (/\b(tugas|kerjaan|kuliah|skripsi|dosen|bos|kantor|sekolah|ujian)\b/i.test(lowerText)) return "Wah, rutinitas itu emang sering bikin stres dan kewalahan ya. Jangan lupa kasih dirimu jeda istirahat walau cuma 10 menit. Kamu udah berusaha keras kok hari ini!";
+            if (/\b(makasih|terima kasih|thanks|suwun|tengkyu|thx)\b/i.test(lowerText)) return "Sama-sama! Inget ya, kamu gak sendirian. Kalau butuh teman ngobrol, aku bakal selalu siap dengerin kamu. Semangat terus ya! 😊";
+
+            const defaultResponses = [
+                "Aku paham kok. Terus kelanjutannya gimana?",
+                "Oh gitu ya.. Pasti nggak gampang ada di posisimu.",
+                "Kamu hebat udah bisa bertahan sejauh ini. Cerita aja terus kalau itu bikin kamu lega.",
+                "Makasih ya udah mau terbuka dan cerita soal ini ke aku.",
+                "Iya, aku ngerti maksud kamu. Terus perasaanmu waktu itu gimana?",
+                "Hmm, wajar sih kalau kamu ngerasa gitu. Pelan-pelan aja jalaninnya ya."
+            ];
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // Logic Meditasi & Audio Player
+        const breatheText = document.getElementById('breathe-text');
+        if (breatheText) {
+            setInterval(() => {
+                if(breatheText.innerText === 'Tarik...') {
+                    setTimeout(() => breatheText.innerText = 'Tahan...', 3000);
+                    setTimeout(() => breatheText.innerText = 'Hembuskan...', 4000);
+                } else {
+                    breatheText.innerText = 'Tarik...';
+                }
+            }, 8000);
+        }
+
+        // Audio Player State
+        let currentAudio = null;
+        let currentPlayBtn = null;
+
+        function toggleAudio(audioId, btnElement) {
+            const audioToPlay = document.getElementById(audioId);
+            const iconElement = btnElement.querySelector('i');
+
+            // Jika mengeklik audio yang sedang berjalan (Pause/Play toggle)
+            if (currentAudio === audioToPlay) {
+                if (audioToPlay.paused) {
+                    const playPromise = audioToPlay.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            iconElement.classList.replace('fa-circle-play', 'fa-circle-pause');
+                        }).catch(error => {
+                            console.error("Audio playback failed:", error);
+                            alert("Gagal memutar audio. Pastikan koneksi internet stabil.");
+                        });
+                    }
+                } else {
+                    audioToPlay.pause();
+                    iconElement.classList.replace('fa-circle-pause', 'fa-circle-play');
+                }
+                return;
+            }
+
+            // Jika ada audio lain yang sedang dimainkan, matikan dulu
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0; // Reset ke awal
+                if (currentPlayBtn) {
+                    const prevIcon = currentPlayBtn.querySelector('i');
+                    if(prevIcon) prevIcon.classList.replace('fa-circle-pause', 'fa-circle-play');
+                }
+            }
+
+            // Mainkan audio baru yang dipilih dengan penanganan Promise
+            const playPromise = audioToPlay.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    iconElement.classList.replace('fa-circle-play', 'fa-circle-pause');
+                    // Simpan state audio yang aktif
+                    currentAudio = audioToPlay;
+                    currentPlayBtn = btnElement;
+                }).catch(error => {
+                    console.error("Audio playback failed:", error);
+                    // Kembalikan ikon jika audio gagal diputar
+                    iconElement.classList.replace('fa-circle-pause', 'fa-circle-play');
+                    alert("Gagal memuat sumber suara. Browser Anda mungkin memblokir pemutaran otomatis.");
+                });
+            } else {
+                iconElement.classList.replace('fa-circle-play', 'fa-circle-pause');
+                currentAudio = audioToPlay;
+                currentPlayBtn = btnElement;
+            }
+        }
+    </script>
+</body>
+</html>
